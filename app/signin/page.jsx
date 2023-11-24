@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from "react";
 import styles from "./page.module.css";
 
 import { Input } from "@/components/ui/input";
@@ -14,45 +15,66 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import Link from 'next/link';
+const jwt = require('jsonwebtoken');
+// import { config } from 'dotenv';
+// config();
 
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
-
-import Link from "next/link"
-
-
-
-export default function Signup() {
+export default function Signin() {
     const [email, setEmail] = useState("");
-    const [name, setName] = useState("");
     const [password, setPassword] = useState("");
-    const [userType, setUserType] = useState("student");
+    const router = useRouter();
+    
+    const secret = "dahdkjfhdskjfauio438723942uifuaydfsa87r923r2#@$%@%@";
 
-    const handleUserTypeChange = (e) => {
-        setUserType(e);
-    };
+    useEffect(() => {
+        const token = localStorage.getItem("token");
 
-    const signup = () => {
-        console.log(name, email, password, userType);
+        if(!token){
+            return;
+        }
 
-        fetch("/api/signup", {
+        if (token) {
+            try{
+                var decoded = jwt.verify(token, secret);
+
+                console.log(decoded);
+                if(decoded.userType === "Student"){
+                }
+                else if(decoded.userType === "Teacher"){
+                    router.push("/dashboard");
+                }
+            }
+            catch(err){
+                console.error("Token verification failed:", error);
+                localStorage.removeItem("token");
+            }
+        }
+    }, []);
+
+
+
+
+    const signin = () => {
+        console.log(email, password);
+
+        fetch("/api/signin", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ name, email, password, userType: userType }),
+            body: JSON.stringify({email, password }),
         })
             .then((res) => res.json())
             .then((data) => {
                 console.log(data);
-                // if (data.success) {
-                //     window.location.href = "/login";
-                // }
+                if(data.statusCode == 400){
+                    alert("Invalid Credentials");
+                    return;
+                }
+                const token = data.token;
+                localStorage.setItem("token", token);
+                router.push("/dashboard");
             });
     };
 
@@ -60,23 +82,12 @@ export default function Signup() {
         <div className={styles.mainContainer}>
             <Card style={{ width: "380px" }}>
                 <CardHeader>
-                    <CardTitle>Sign Up</CardTitle>
+                    <CardTitle>Sign In</CardTitle>
                     <CardDescription>Enter your credentials</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form>
                         <div className="grid w-full items-center gap-4">
-                            <div className="flex flex-col space-y-1.5">
-                                <Label htmlFor="name">Name</Label>
-                                <Input
-                                    value={name}
-                                    onChange={(e) => {
-                                        setName(e.target.value);
-                                    }}
-                                    id="name"
-                                    placeholder="Enter name"
-                                />
-                            </div>
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="name">Email</Label>
                                 <Input
@@ -100,28 +111,14 @@ export default function Signup() {
                                     placeholder="Enter password"
                                 />
                             </div>
-
-                            <div className="flex flex-col space-y-1.5">
-                                <Label htmlFor="dropdown">Select User Type</Label>
-                                <Select id="dropdown" value={userType} onValueChange={handleUserTypeChange}>
-                                    <SelectTrigger >
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="teacher">Teacher</SelectItem>
-                                        <SelectItem value="student">Student</SelectItem>
-
-                                    </SelectContent>
-                                </Select>
-                            </div>
                         </div>
                     </form>
                 </CardContent>
                 <CardFooter className="block">
                     <div className='flex items-center justify-center'>
-                    <Button onClick={signup}>Signup</Button></div>
+                    <Button onClick={signin}>Sign In</Button></div>
                     <div className='flex items-center justify-center mt-5'>
-                    <Label >Already have an account? <Link href="/signin">Sign In</Link></Label>
+                    <Label >Not have an account? <Link href="/signup">Sign Up</Link></Label>
                     </div>
                 </CardFooter>
             </Card>
