@@ -46,7 +46,7 @@ export default function Signin() {
                 }
             }
             catch(err){
-                console.error("Token verification failed:", error);
+                console.error("Token verification failed:", err);
                 localStorage.removeItem("token");
             }
         }
