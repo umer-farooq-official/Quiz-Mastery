@@ -1,3 +1,8 @@
+//File defines the page for creating a mcq question
+//The page is a form with 5 input fields and a button
+//The button calls the mcq function which sends a post request to the server
+//The server then adds the question to the database
+
 "use client"
 import FeaturesPane from "@/components/FeaturesPane";
 import * as React from "react"
@@ -28,6 +33,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
 
+
+//The mcq function sends a post request to the server
 export default function Page() {
   const [date, setDate] = React.useState<Date>();
   const [name, setName] = React.useState("");
@@ -39,10 +46,12 @@ export default function Page() {
   const router = useRouter();   
   const secret = "dahdkjfhdskjfauio438723942uifuaydfsa87r923r2#@$%@%@";
 
+  //The decoded token is used to get the user id
   interface DecodedToken {
     userId: string;
   }
 
+  //The createTest function sends a post request to the server
   useEffect(() => {
       const token = localStorage.getItem("token");
 
@@ -69,7 +78,7 @@ export default function Page() {
   }, []);
 
 
-
+  //The createTest function sends a post request to the server
   const createTest = () =>{
     fetch("/api/createTest", {
       method: "POST",

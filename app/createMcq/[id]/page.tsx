@@ -1,3 +1,10 @@
+//File defines the page for creating a mcq question
+//The page is a form with 5 input fields and a button
+//The button calls the mcq function which sends a post request to the server
+//The server then adds the question to the database
+//The server returns a json object with the question id
+//The client then redirects to the question page with the question id
+
 "use client";
 import * as React from "react";
 import styles from "./page.module.css";
@@ -15,6 +22,8 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
+
+//The mcq function sends a post request to the server
 export default function mcq({ params }: { params: { id: string } }) {
     const [question, setQuestion] = React.useState("");
     const [option1, setOption1] = React.useState("");

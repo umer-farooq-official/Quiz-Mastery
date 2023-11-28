@@ -1,3 +1,8 @@
+// File description: This file defines the page for creating a test
+// The page is a form with 5 input fields and a button
+// The button calls the createTest function which sends a post request to the server
+// The server then adds the test to the database
+// The server returns a json object with the test id
 
 "use client";
 import FeaturesPane from "@/components/FeaturesPane";
@@ -35,7 +40,8 @@ interface DecodedToken {
     exp: number;
 }
 
-
+//The createTest function sends a post request to the server
+//The decoded token is used to get the user id
 export default function Page() {
     const [tests, setTests] = useState<Test[]>([]);
     const [token, setToken] = useState("");
@@ -86,7 +92,6 @@ export default function Page() {
             console.error("Failed to fetch tests");
         }
     };
-
     if (token != "") {
         return (
             <>

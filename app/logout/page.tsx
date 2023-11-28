@@ -1,4 +1,4 @@
-
+// This page gets the user id from the token and then sends a post request to the server to delete the user from the database
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -13,7 +13,7 @@ export default function Page() {
             router.push("/signin");
             return;
         }
-        else{
+        else {
             localStorage.removeItem("token");
             router.push("/signin");
         }

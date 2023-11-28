@@ -1,9 +1,19 @@
+// Desc: Sign-in route
+// /*File description:
+// This file is the api for signing in a user
+// This file is called from ../../../app/SignIn*/
+
+
+
 import UserModel from '@/model/User';
 import { sequelize } from '@/lib/database';
 import jwt from 'jsonwebtoken';
 import { config } from 'dotenv';
 config();
 
+
+
+// This function is called when the user clicks on the submit button after filling the form in SignIn
 export async function POST(req) {
     const { email, password } = await req.json();
     console.log(email, password);
