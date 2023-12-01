@@ -17,8 +17,6 @@ import {
 } from "@/components/ui/card";
 import Link from 'next/link';
 const jwt = require('jsonwebtoken');
-// import { config } from 'dotenv';
-// config();
 
 export default function Signin() {
     const [email, setEmail] = useState("");
