@@ -1,12 +1,10 @@
 
 "use client";
-// Import necessary components and hooks
 import FeaturesPane from "@/components/FeaturesPane";
 import { useState, useEffect } from "react";
-// import { useContext } from "react";
 import { useRouter } from "next/navigation";
 import jwt from 'jsonwebtoken';
-// import SidebarContext from "@/components/SidebarContext";
+import Link from "next/link";
 
 import {
     Table,
@@ -19,7 +17,6 @@ import {
     TableRow,
 } from "@/components/ui/table";
 
-// Define the shape of the Test object
 interface Test {
     id: string;
     name: string;
@@ -29,7 +26,6 @@ interface Test {
     date: string;
 }
 
-// Define the shape of the DecodedToken object
 interface DecodedToken {
     userId: string;
     name: string;
@@ -39,7 +35,7 @@ interface DecodedToken {
     exp: number;
 }
 
-// The main component
+
 export default function Page() {
     const [tests, setTests] = useState<Test[]>([]);
     const [token, setToken] = useState("");
@@ -55,10 +51,9 @@ export default function Page() {
             router.push("/signin");
             return;
         }
-        else{
+        else {
             setToken(token);
         }
-
 
         try {
             var decodedToken = jwt.verify(token, secret) as DecodedToken;
@@ -92,51 +87,48 @@ export default function Page() {
         }
     };
 
-    if(token != ""){
-    return (
-        <>
-            <div>
-                <FeaturesPane />
-            </div>
-
-            <main className="md:w-3/4 p-8 ml-80" >
+    if (token != "") {
+        return (
+            <>
                 <div>
-                    <Table className="flex min-h-screen flex-col items-left">
-                        
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead className="w-[100px]">Test Name</TableHead>
-                                <TableHead className="w-[100px]">Start Time</TableHead>
-                                <TableHead className="w-[100px]">End Time</TableHead>
-                                <TableHead className="w-[120px]">Unique Code</TableHead>
-                                <TableHead className="w-[120px]">Date</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                        
-
-                        {tests.length === 0 ? (
-                            // Display a loading message or handle empty state
-                            <TableRow>
-                                <TableCell colSpan={6}>Loading...</TableCell>
-                            </TableRow>
-                        ) : (
-                            // Map over tests when there is data
-                            tests.map((test) => (
-                                <TableRow key={test.id}>
-                                    <TableCell className="w-[100px]">{test.name}</TableCell>
-                                    <TableCell className="w-[100px]">{test.startTime}</TableCell>
-                                    <TableCell className="w-[100px]">{test.endTime}</TableCell>
-                                    <TableCell className="w-[120px]">{test.code}</TableCell>
-                                    <TableCell className="w-[120px]">{test.date}</TableCell>
-                                </TableRow>
-                            ))
-                        )}
-                        </TableBody>
-                    </Table>
+                    <FeaturesPane />
                 </div>
-            </main>
-        </>
-    );
-}
+
+                <main className="md:w-3/4 p-8 ml-80" >
+                    <div>
+                        <Table className="flex min-h-screen flex-col items-left">
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead className="w-[100px]">Test Name</TableHead>
+                                    <TableHead className="w-[100px]">Start Time</TableHead>
+                                    <TableHead className="w-[100px]">End Time</TableHead>
+                                    <TableHead className="w-[120px]">Unique Code</TableHead>
+                                    <TableHead className="w-[120px]">Date</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {tests.length === 0 ? (
+                                    <TableRow>
+                                        <TableCell colSpan={6}>Loading...</TableCell>
+                                    </TableRow>
+                                ) : (
+                                    tests.map((test) => (
+                                        <Link href={`/test/${test.id}`}>
+                                        <TableRow key={test.id}>
+                                            <TableCell className="w-[100px]">{test.name}</TableCell>
+                                            <TableCell className="w-[100px]">{test.startTime}</TableCell>
+                                            <TableCell className="w-[100px]">{test.endTime}</TableCell>
+                                            <TableCell className="w-[120px]">{test.code}</TableCell>
+                                            <TableCell className="w-[120px]">{test.date}</TableCell>
+                                        </TableRow>
+                                        </Link>
+                                    ))
+                                )}
+                            </TableBody>
+                        </Table>
+                    </div>
+                </main>
+            </>
+        );
+    }
 }

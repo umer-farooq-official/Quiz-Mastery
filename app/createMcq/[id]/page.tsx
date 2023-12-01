@@ -15,30 +15,28 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
-export default function mcq() {
+export default function mcq({ params }: { params: { id: string } }) {
     const [question, setQuestion] = React.useState("");
     const [option1, setOption1] = React.useState("");
     const [option2, setOption2] = React.useState("");
     const [option3, setOption3] = React.useState("");
     const [option4, setOption4] = React.useState("");
-    const [correctoption, setCorrectOption] = React.useState("");
+    const [correctOption, setCorrectOption] = React.useState("");
+    const [marks, setMarks] = React.useState("");
 
     const mcq = () => {
-        console.log(question, option1, option2, option3, option4);
+        console.log(question, option1, option2, option3, option4, marks);
 
-        fetch("/api/mcq", {
+        fetch("/api/createMcq", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ question, option1, option2, option3, option4, correctoption }),
+            body: JSON.stringify({ testId: params.id, question, option1, option2, option3, option4, correctOption, marks }),
         })
             .then((res) => res.json())
             .then((data) => {
                 console.log(data);
-                if (data.success) {
-                    window.location.href = "/login";
-                }
             });
     };
 
@@ -46,12 +44,15 @@ export default function mcq() {
         <div className={styles.mainContainer}>
             <Card style={{ width: "380px" }}>
                 <CardHeader>
-                    <CardTitle>Question 1</CardTitle>
+                    <CardTitle>Add Mcq</CardTitle>
+                    <Label htmlFor="question">Question</Label>
                     <Input
                         value={question}
                         onChange={(e) => {
                             setQuestion(e.target.value);
                         }}
+                        id="question"
+                        placeholder="Enter a question"
                     />
                 </CardHeader>
                 <CardContent>
@@ -104,12 +105,23 @@ export default function mcq() {
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="correctoption">Correct Option</Label>
                                 <Input
-                                    value={correctoption}
+                                    value={correctOption}
                                     onChange={(e) => {
                                         setCorrectOption(e.target.value);
                                     }}
                                     id="correctoption"
                                     placeholder="Enter te correct option"
+                                />
+                            </div>
+                            <div className="flex flex-col space-y-1.5">
+                                <Label htmlFor="marks">Marks</Label>
+                                <Input
+                                    value={marks}
+                                    onChange={(e) => {
+                                        setMarks(e.target.value);
+                                    }}
+                                    id="marks"
+                                    placeholder="Enter the marks"
                                 />
                             </div>
                         </div>

@@ -1,8 +1,10 @@
 import { DataTypes, sequelize } from 'sequelize';
+import TestModel from '@/model/Test';
+
 
 
 module.exports = (sequelize) => {
-    const Test = sequelize.define('Mcq', {
+    const Mcqs = sequelize.define('Mcqs', {
         id: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4, // Generates UUID by default
@@ -14,11 +16,11 @@ module.exports = (sequelize) => {
             allowNull: false,
         },
         option1: {
-            type: DataTypes.TIME,
+            type: DataTypes.STRING,
             allowNull: false,
         },
         option2: {
-            type: DataTypes.UUID,
+            type: DataTypes.STRING,
             allowNull: false,
         },
         option3: {
@@ -29,18 +31,25 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        correctoption: {
+        correctOption: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        testid: {
+        marks: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        testId: {
             type: DataTypes.UUID,
             allowNull: false,
         },
     });
+    const Test = TestModel(sequelize);
+    Test.sync();
+    
 
-    Test.belongsTo(Test, { foreignKey: 'testid' });
-    return Mcq;
+    Mcqs.belongsTo(Test, { foreignKey: 'testId' });
+    return Mcqs;
 
 }
 
