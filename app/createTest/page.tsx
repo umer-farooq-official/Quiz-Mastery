@@ -71,8 +71,6 @@ export default function Page() {
 
 
   const createTest = () =>{
-    console.log(date, name, code, startTime, endTime);
-    console.log(decoded)
     fetch("/api/createTest", {
       method: "POST",
       headers: {
